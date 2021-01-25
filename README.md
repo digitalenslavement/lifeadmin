@@ -1,2 +1,2 @@
-# lifeadmin
+# Life Admin
 Щоб упорядочить свою жiттю
