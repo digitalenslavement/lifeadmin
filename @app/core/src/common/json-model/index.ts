@@ -1,6 +1,8 @@
 import { GLOBAL_CONFIG } from 'src/main';
+import { PaginationQuery } from '../interfaces/queries';
 import { IdResource } from '../interfaces/resources';
 import UtilsService from '../utils';
+import PaginationService from '../utils/pagination';
 
 export default class JSONModel<T extends IdResource> {
   protected readonly model: string;
@@ -32,6 +34,18 @@ export default class JSONModel<T extends IdResource> {
     return items;
   }
 
+  public async getById(_id: string): Promise<T> {
+    const item = (await this.getAll()).find(e => e._id === _id);
+    if(!item) throw new Error("Item Not Found");
+    return item;
+  }
+
+  public async getPage(paginationQuery: PaginationQuery): Promise<T[]> {
+    const allItems = await this.getAll();
+    const responseItems = PaginationService.paginate({items: allItems, paginationQuery});
+    return responseItems;
+  }
+
   public async editMany(editItems: T[]): Promise<T[]> {
     const idsSet = this.getIdsSet(editItems);
     const allItems = await this.getAll();
@@ -45,6 +59,14 @@ export default class JSONModel<T extends IdResource> {
 
     await this.writeItems(responseItems);
     return responseItems;
+  }
+
+  public async deleteById(id: string): Promise<T> {
+    const items = await this.getAll();
+    const item = (items).find(e => e._id === id );
+    if(!item) throw new Error("Item Not Found");
+    await this.writeItems(items.filter(e => !(e._id === id)));
+    return item;
   }
 
   public async deleteMany(ids: string[]): Promise<T[]> {
