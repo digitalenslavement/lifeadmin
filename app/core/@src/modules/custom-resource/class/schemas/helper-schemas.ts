@@ -1,5 +1,9 @@
-import { TimestampedIdResource } from '@src/common/interfaces/resources';
+import {
+  IdResourceSchema,
+  TimestampedIdResource,
+} from '@src/common/interfaces/resources';
 import Id from '@src/common/json-model/id';
+import Joi from '@src/common/joi/extended';
 
 // Common Resource Class Row Type
 export enum CustomResourceRowType {
@@ -7,6 +11,7 @@ export enum CustomResourceRowType {
   Number = 'Number',
   Date = 'Date',
 }
+export const CustomResourceRowTypes = Object.values(CustomResourceRowType);
 export interface ICustomResourceRowTypeValue {
   [CustomResourceRowType.String]: string;
   [CustomResourceRowType.Number]: number;
@@ -19,8 +24,17 @@ export interface ICustomResourceRow {
   type: CustomResourceRowType;
   label: string;
 }
+export const CustomResourceRowSchema = IdResourceSchema.keys({
+  type: Joi.string()
+    .valid(...CustomResourceRowTypes)
+    .required(),
+  label: Joi.string().required(),
+});
 
 // Common Resource Class Schema
 export interface ICustomResourceClass extends TimestampedIdResource {
   rows: ICustomResourceRow[];
 }
+export const CustomResourceClassSchema = Joi.object({
+  rows: Joi.array().items(CustomResourceRowSchema).required(),
+});
