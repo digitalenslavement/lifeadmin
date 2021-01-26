@@ -38,5 +38,23 @@ describe('Custom Resource Class', () => {
 
       done();
     });
+
+    it('Delete', async (done) => {
+      const args = {
+        rows: [
+          { label: 'Name', type: CustomResourceRowType.String },
+          { label: 'Count', type: CustomResourceRowType.Number },
+        ],
+      };
+
+      const createdDoc = await controller.create(args);
+      const retreivedDoc = await controller.get({ _id: createdDoc._id });
+      expect(retreivedDoc._id === createdDoc._id).toBeTruthy();
+
+      await controller.delete({ _id: createdDoc._id });
+
+      expect(controller.get({ _id: createdDoc._id })).rejects.toThrow();
+      done();
+    });
   });
 });
