@@ -1,6 +1,8 @@
+import Id from '../json-model/id';
+
 // Identifier Having Resource
 export interface IdResource {
-  _id: string;
+  _id: Id;
 }
 
 // Minimal Default Resource

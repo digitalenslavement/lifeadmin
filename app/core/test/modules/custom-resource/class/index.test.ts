@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '@src/app.module';
+import Id from '@src/common/json-model/id';
 import CustomResourceClassController from '@src/modules/custom-resource/class/controller';
 import { CustomResourceRowType } from '@src/modules/custom-resource/class/schemas/helper-schemas';
 import TestUtils from 'test/common/utils';
@@ -27,7 +28,7 @@ describe('Custom Resource Class', () => {
       const createdDoc = await controller.create(args);
       const retreivedDoc = await controller.get({ _id: createdDoc._id });
 
-      expect(retreivedDoc._id === createdDoc._id).toBeTruthy();
+      expect(retreivedDoc._id.equals(createdDoc._id)).toBeTruthy();
       expect(
         retreivedDoc.rows.every(
           (e, i) =>
@@ -49,11 +50,11 @@ describe('Custom Resource Class', () => {
 
       const createdDoc = await controller.create(args);
       const retreivedDoc = await controller.get({ _id: createdDoc._id });
-      expect(retreivedDoc._id === createdDoc._id).toBeTruthy();
+      expect(retreivedDoc._id.equals(createdDoc._id)).toBeTruthy();
 
       await controller.delete({ _id: createdDoc._id });
 
-      expect(controller.get({ _id: createdDoc._id })).rejects.toThrow();
+      await expect(controller.get({ _id: createdDoc._id })).rejects.toThrow();
       done();
     });
   });

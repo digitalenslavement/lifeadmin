@@ -1,4 +1,5 @@
 import { Controller, Delete, Get, Post } from '@nestjs/common';
+import Id from '@src/common/json-model/id';
 import { CustomResourceClass, CustomResourceClassModel } from './model/model';
 import {
   IAPOSTCustomResourceClass,

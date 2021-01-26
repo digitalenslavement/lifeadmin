@@ -3,24 +3,37 @@ import { OptionalKeys } from '@src/common/interfaces/generics';
 import { TimestampedIdResource } from '@src/common/interfaces/resources';
 import JSONModel from '@src/common/json-model';
 import JSONDocument from '@src/common/json-model/doc';
-import { ICustomResourceClass } from '../schemas/helper-schemas';
+import Id from '@src/common/json-model/id';
+import {
+  ICustomResourceClass,
+  ICustomResourceRow,
+} from '../schemas/helper-schemas';
 
 @Injectable()
-export class CustomResourceClassModel extends JSONModel<ICustomResourceClass> {
+export class CustomResourceClassModel extends JSONModel<
+  ICustomResourceClass,
+  typeof CustomResourceClass
+> {
   constructor() {
-    super({ model: 'common-resource-class' });
+    super({
+      model: 'common-resource-class',
+      instanceClass: CustomResourceClass,
+    });
   }
 }
 
 export class CustomResourceClass
   extends JSONDocument
   implements ICustomResourceClass {
-  public readonly rows: ICustomResourceClass["rows"]; 
+  public readonly rows: ICustomResourceClass['rows'];
 
   constructor(
-    args: OptionalKeys<ICustomResourceClass, keyof TimestampedIdResource>,
+    args: Omit<
+      OptionalKeys<ICustomResourceClass, keyof TimestampedIdResource>,
+      'rows'
+    > & { rows: OptionalKeys<ICustomResourceRow, '_id'>[] },
   ) {
     super(args);
-    this.rows = args.rows;
+    this.rows = args.rows.map((e) => ({ ...e, _id: new Id(e._id) }));
   }
 }

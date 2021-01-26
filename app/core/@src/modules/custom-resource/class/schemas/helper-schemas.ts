@@ -1,4 +1,5 @@
-import { TimestampedIdResource } from "@src/common/interfaces/resources";
+import { TimestampedIdResource } from '@src/common/interfaces/resources';
+import Id from '@src/common/json-model/id';
 
 // Common Resource Class Row Type
 export enum CustomResourceRowType {
@@ -6,9 +7,15 @@ export enum CustomResourceRowType {
   Number = 'Number',
   Date = 'Date',
 }
+export interface ICustomResourceRowTypeValue {
+  [CustomResourceRowType.String]: string;
+  [CustomResourceRowType.Number]: number;
+  [CustomResourceRowType.Date]: Date;
+}
 
 // Common Resource Class Row Schema
 export interface ICustomResourceRow {
+  _id: Id;
   type: CustomResourceRowType;
   label: string;
 }

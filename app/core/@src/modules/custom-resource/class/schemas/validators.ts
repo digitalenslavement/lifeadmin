@@ -1,12 +1,11 @@
 import { IdQuery, PaginationQuery } from '@src/common/interfaces/queries';
 import { TimestampedIdResource } from '@src/common/interfaces/resources';
-import { ICustomResourceClass } from './helper-schemas';
+import { ICustomResourceClass, ICustomResourceRow } from './helper-schemas';
 
 // Post Common Resource Class
-export type IAPOSTCustomResourceClass = Omit<
-  ICustomResourceClass,
-  keyof TimestampedIdResource
->;
+export type IAPOSTCustomResourceClass = {
+  rows: Omit<ICustomResourceRow, '_id'>[];
+};
 
 export type IRPOSTCustomResourceClass = ICustomResourceClass;
 
