@@ -10,13 +10,18 @@ import { IConfig } from './common/config/interface';
 import UtilsService from './common/utils';
 import CustomResourceClassController from './modules/custom-resource/class/controller';
 import { CustomResourceClassModel } from './modules/custom-resource/class/model/model';
-import CommonResourceItemController from './modules/custom-resource/item/controller';
+import CustomResourceItemController from './modules/custom-resource/item/controller';
 import CustomResourceItemModel from './modules/custom-resource/item/model/model';
+import CustomResourceItemService from './modules/custom-resource/item/services';
 
 @Module({
   imports: [],
-  controllers: [CommonResourceItemController, CustomResourceClassController],
-  providers: [CustomResourceItemModel, CustomResourceClassModel],
+  controllers: [CustomResourceItemController, CustomResourceClassController],
+  providers: [
+    CustomResourceItemModel,
+    CustomResourceClassModel,
+    CustomResourceItemService,
+  ],
 })
 export class AppModule implements NestModule {
   private static moduleRef: ModuleRef;

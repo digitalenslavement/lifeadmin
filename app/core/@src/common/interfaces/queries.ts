@@ -1,4 +1,4 @@
-import { IdResource, IdResourceSchema } from './resources';
+import { IIdResource, IdResourceSchema } from './resources';
 import Joi from '@src/common/joi/extended';
 
 // Pagination Query
@@ -12,5 +12,5 @@ export const PaginationQuerySchema = Joi.object({
 });
 
 // Id Query
-export type IdQuery = IdResource;
+export type IdQuery = IIdResource;
 export const IdQuerySchema = IdResourceSchema;

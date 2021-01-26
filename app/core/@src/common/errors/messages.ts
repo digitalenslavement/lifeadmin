@@ -6,4 +6,7 @@ export const ErrorIds = {
     RecordNotFound: new Id().id,
     DuplicateID: new Id().id,
   },
+  CustomResource: {
+    ItemNotSatisfyingClass: new Id().id,
+  },
 };

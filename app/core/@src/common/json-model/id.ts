@@ -26,7 +26,6 @@ export default class Id implements IId {
   private prepareIdArg(_id: string | number | Id | IId): string {
     if (this.implementsId(_id)) return _id.id;
     const stringified = _id.toString().trim();
-    console.log('RAW ID: ', _id, 'STRINGIFIED: ', stringified);
     return stringified;
   }
 

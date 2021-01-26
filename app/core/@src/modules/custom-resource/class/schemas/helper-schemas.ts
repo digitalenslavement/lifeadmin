@@ -1,6 +1,6 @@
 import {
   IdResourceSchema,
-  TimestampedIdResource,
+  ITimestampedIdResource,
 } from '@src/common/interfaces/resources';
 import Id from '@src/common/json-model/id';
 import Joi from '@src/common/joi/extended';
@@ -23,18 +23,20 @@ export interface ICustomResourceRow {
   _id: Id;
   type: CustomResourceRowType;
   label: string;
+  optional?: boolean;
 }
 export const CustomResourceRowSchema = IdResourceSchema.keys({
   type: Joi.string()
     .valid(...CustomResourceRowTypes)
     .required(),
   label: Joi.string().required(),
+  optional: Joi.boolean(),
 });
 
 // Common Resource Class Schema
-export interface ICustomResourceClass extends TimestampedIdResource {
+export interface ICustomResourceClass extends ITimestampedIdResource {
   rows: ICustomResourceRow[];
 }
 export const CustomResourceClassSchema = Joi.object({
-  rows: Joi.array().items(CustomResourceRowSchema).required(),
+  rows: Joi.array().items(CustomResourceRowSchema).min(1).required(),
 });

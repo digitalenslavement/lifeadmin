@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OptionalKeys } from '@src/common/interfaces/generics';
-import { TimestampedIdResource } from '@src/common/interfaces/resources';
+import { ITimestampedIdResource } from '@src/common/interfaces/resources';
 import JSONModel from '@src/common/json-model';
 import JSONDocument from '@src/common/json-model/doc';
 import Id from '@src/common/json-model/id';
@@ -29,7 +29,7 @@ export class CustomResourceClass
 
   constructor(
     args: Omit<
-      OptionalKeys<ICustomResourceClass, keyof TimestampedIdResource>,
+      OptionalKeys<ICustomResourceClass, keyof ITimestampedIdResource>,
       'rows'
     > & { rows: OptionalKeys<ICustomResourceRow, '_id'>[] },
   ) {

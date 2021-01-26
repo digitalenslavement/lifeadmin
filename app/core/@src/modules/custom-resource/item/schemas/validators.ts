@@ -3,15 +3,17 @@ import {
   PaginationQuerySchema,
 } from '@src/common/interfaces/queries';
 import {
-  TimestampedIdResource,
-  IdResource,
+  ITimestampedIdResource,
+  IIdResource,
   IdResourceSchema,
   TimestampedIdResourceKeys,
 } from '@src/common/interfaces/resources';
 import Id from '@src/common/json-model/id';
 import {
+  CustomResourceItemRowSchema,
   CustomResourceItemSchema,
   ICustomResourceItem,
+  ICustomResourceItemRow,
 } from './helper-schemas';
 import Joi from '@src/common/joi/extended';
 import { JoiForkUtils } from '@src/common/joi/utils';
@@ -19,7 +21,7 @@ import { JoiForkUtils } from '@src/common/joi/utils';
 // POST Create Common Resource Item
 export type IAPOSTCustomResourceItem = Omit<
   ICustomResourceItem,
-  keyof TimestampedIdResource
+  keyof ITimestampedIdResource
 >;
 export const APOSTCustomResourceItemSchema = CustomResourceItemSchema.fork(
   TimestampedIdResourceKeys,
@@ -29,7 +31,7 @@ export const APOSTCustomResourceItemSchema = CustomResourceItemSchema.fork(
 export type IRPOSTCustomResourceItem = ICustomResourceItem;
 
 // GET Common Resource Item
-export type IAGETCustomResourceItem = IdResource;
+export type IAGETCustomResourceItem = IIdResource;
 export const AGETCustomResourceItemSchema = IdResourceSchema;
 
 export type IRGETCustomResourceItem = ICustomResourceItem;
@@ -49,7 +51,7 @@ export type IRGETCustomResourceItemListPage = ICustomResourceItem[];
 export const RGETCustomResourceItemListPageSchema = CustomResourceItemSchema;
 
 // DELETE Common Resource Item
-export type IADELETECustomResourceItem = IdResource;
+export type IADELETECustomResourceItem = IIdResource;
 export const ADELETECustomResourceItemSchema = IdResourceSchema;
 
 export type IRDELETECustomResourceItem = ICustomResourceItem;

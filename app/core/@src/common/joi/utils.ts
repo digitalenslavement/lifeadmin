@@ -7,7 +7,7 @@ export class JoiForkUtils {
 }
 
 export class JoiValidationUtils {
-  public static assertMatchesSchema<T>(
+  public static assertSatisfiesSchema<T>(
     obj: T,
     schema: AnySchema,
     options: ValidationOptions = {

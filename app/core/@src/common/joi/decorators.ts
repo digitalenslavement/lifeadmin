@@ -16,7 +16,7 @@ export const wValidatedArg = createParamDecorator(
     const reqPart =
       (Array.isArray(data) ? data[1] : defaultReqPart) || defaultReqPart;
     const object = getObject(req, reqPart);
-    return JoiValidationUtils.assertMatchesSchema(object, schema);
+    return JoiValidationUtils.assertSatisfiesSchema(object, schema);
   },
 );
 

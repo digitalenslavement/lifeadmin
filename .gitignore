@@ -105,3 +105,6 @@ dist
 
 # Project Database Directories
 db/
+
+# Dependent Repositories With Documentation Just For Me
+dependent-repos/

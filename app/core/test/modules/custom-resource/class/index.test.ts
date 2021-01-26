@@ -47,14 +47,11 @@ describe('Custom Resource Class', () => {
           { label: 'Count', type: CustomResourceRowType.Number },
         ],
       };
-
       const createdDoc = await controller.create(args);
-      const retreivedDoc = await controller.get({ _id: createdDoc._id });
-      expect(retreivedDoc._id.equals(createdDoc._id)).toBeTruthy();
 
       await controller.delete({ _id: createdDoc._id });
-
       await expect(controller.get({ _id: createdDoc._id })).rejects.toThrow();
+
       done();
     });
   });

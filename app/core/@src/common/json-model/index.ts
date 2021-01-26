@@ -2,7 +2,7 @@ import { AppModule } from '@src/app.module';
 import CustomError from '../errors';
 import { ErrorIds } from '../errors/messages';
 import { PaginationQuery } from '../interfaces/queries';
-import { IdResource } from '../interfaces/resources';
+import { IIdResource } from '../interfaces/resources';
 import UtilsService from '../utils';
 import PaginationService from '../utils/pagination';
 import JSONDocument from './doc';
@@ -122,7 +122,7 @@ export default class JSONModel<
   }
 
   private getIdsSet(
-    items: IdResource[],
+    items: IIdResource[],
     assertDuplicateIds: boolean = true,
   ): Set<string> {
     const idsSet = new Set<string>();
@@ -134,7 +134,7 @@ export default class JSONModel<
     return idsSet;
   }
 
-  private assertDuplicateIds(items: IdResource[]) {
+  private assertDuplicateIds(items: IIdResource[]) {
     this.getIdsSet(items, true);
   }
 

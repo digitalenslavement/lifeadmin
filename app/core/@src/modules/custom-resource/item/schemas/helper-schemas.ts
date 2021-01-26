@@ -1,7 +1,9 @@
 import {
   IdResourceSchema,
-  TimestampedIdResource,
+  ITimestampedIdResource,
+  ITimestampedResource,
   TimestampedIdResourceSchema,
+  TimestampedResourceSchema,
 } from '@src/common/interfaces/resources';
 import {
   ICustomResourceRow,
@@ -11,22 +13,25 @@ import Id from '@src/common/json-model/id';
 import Joi from '@src/common/joi/extended';
 
 // Custom Resource Item Row
-export interface ICustomResourceItemRow
-  extends Pick<ICustomResourceRow, '_id'> {
+export interface ICustomResourceItemRow {
   value: ICustomResourceRowTypeValue[keyof ICustomResourceRowTypeValue];
 }
 
-export const CustomResourceItemRowSchema = IdResourceSchema.keys({
+export const CustomResourceItemRowSchema = Joi.object({
   value: Joi.alternatives(Joi.string(), Joi.number(), Joi.date()).required(),
 });
 
 // Custom Resource Item
-export interface ICustomResourceItem extends TimestampedIdResource {
+export interface ICustomResourceItem extends ITimestampedIdResource {
   class: Id;
-  rows: ICustomResourceItemRow[];
+  rows: (ICustomResourceItemRow | null)[];
 }
 
 export const CustomResourceItemSchema = TimestampedIdResourceSchema.keys({
   class: Joi.id().required(),
-  rows: Joi.array().items(CustomResourceItemRowSchema).required(),
+  rows: Joi.array()
+    .items(CustomResourceItemRowSchema)
+    .allow(null)
+    .min(1)
+    .required(),
 });
