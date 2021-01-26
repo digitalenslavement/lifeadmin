@@ -1,7 +1,5 @@
 import { Controller, Delete, Get, Post } from '@nestjs/common';
-import JSONModel from '@src/common/json-model';
-import PaginationService from '@src/common/utils/pagination';
-import {CustomResourceClass, CustomResourceClassModel} from './model/model';
+import { CustomResourceClass, CustomResourceClassModel } from './model/model';
 import {
   IAPOSTCustomResourceClass,
   IRPOSTCustomResourceClass,
@@ -13,13 +11,11 @@ import {
   IRDELETECustomResourceClass,
 } from './schemas/validators';
 
-@Controller()
+@Controller('/api/custom-resource/class')
 export default class CustomResourceClassController {
-  constructor(
-    private readonly _Model: CustomResourceClassModel
-  ){}
+  constructor(private readonly _Model: CustomResourceClassModel) {}
 
-  @Post()
+  @Post('/')
   public async create(
     args: IAPOSTCustomResourceClass,
   ): Promise<IRPOSTCustomResourceClass> {
@@ -28,21 +24,21 @@ export default class CustomResourceClassController {
     return responseItem;
   }
 
-  @Get()
+  @Get('/')
   public async get(
     args: IAGETCustomResourceClass,
   ): Promise<IRGETCustomResourceClass> {
     return this._Model.getById(args._id);
   }
 
-  @Get()
+  @Get('/list/page')
   public async getListPage(
     args: IAGETCustomResourceClassListPage,
   ): Promise<IRGETCustomResourceClassListPage> {
     return this._Model.getPage(args);
   }
 
-  @Delete()
+  @Delete('/')
   public async delete(
     args: IADELETECustomResourceClass,
   ): Promise<IRDELETECustomResourceClass> {

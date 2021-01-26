@@ -1,5 +1,8 @@
 import { PaginationQuery } from '@src/common/interfaces/queries';
-import { TimestampedIdResource, IdResource } from '@src/common/interfaces/resources';
+import {
+  TimestampedIdResource,
+  IdResource,
+} from '@src/common/interfaces/resources';
 import { ICustomResourceItem } from './helper-schemas';
 
 // POST Create Common Resource Item
@@ -16,7 +19,10 @@ export type IAGETCustomResourceItem = IdResource;
 export type IRGETCustomResourceItem = ICustomResourceItem;
 
 // GET Common Resource Item List Page
-export type IAGETCustomResourceItemListPage = PaginationQuery;
+export type IAGETCustomResourceItemListPage = {
+  pagination: PaginationQuery;
+  class: string;
+};
 
 export type IRGETCustomResourceItemListPage = ICustomResourceItem[];
 

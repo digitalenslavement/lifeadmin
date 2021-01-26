@@ -1,5 +1,6 @@
 import { Controller, Delete, Get, Post } from '@nestjs/common';
 import CustomResourceItemModel, { CustomResourceItem } from './model/model';
+import { ICustomResourceItem } from './schemas/helper-schemas';
 import {
   IADELETECustomResourceItem,
   IAGETCustomResourceItem,
@@ -11,13 +12,11 @@ import {
   IRPOSTCustomResourceItem,
 } from './schemas/validators';
 
-@Controller()
+@Controller('/api/custom-resource/item')
 export default class CommonResourceItemController {
-  constructor(
-    private readonly _Model: CustomResourceItemModel
-  ){}
+  constructor(private readonly _Model: CustomResourceItemModel) {}
 
-  @Post()
+  @Post('/')
   public async create(
     args: IAPOSTCustomResourceItem,
   ): Promise<IRPOSTCustomResourceItem> {
@@ -26,20 +25,24 @@ export default class CommonResourceItemController {
     return responseItem;
   }
 
-  @Get()
+  @Get('/')
   public async get(
     args: IAGETCustomResourceItem,
   ): Promise<IRGETCustomResourceItem> {
-    return this._Model.getById(args._id);  }
+    return this._Model.getById(args._id);
+  }
 
-  @Get()
+  @Get('/list/page')
   public async getListPage(
     args: IAGETCustomResourceItemListPage,
   ): Promise<IRGETCustomResourceItemListPage> {
-    return this._Model.getPage(args);
+    const { class: itemClass, pagination } = args;
+    const filter = (items: ICustomResourceItem[]) =>
+      items.filter((e) => e.class === itemClass);
+    return this._Model.getPage(pagination, filter);
   }
 
-  @Delete()
+  @Delete('/')
   public async delete(
     args: IADELETECustomResourceItem,
   ): Promise<IRDELETECustomResourceItem> {

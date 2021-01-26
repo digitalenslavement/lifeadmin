@@ -11,7 +11,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "types": ["node"],
-    "paths": {"@src/*": ["./@src/*"]}
+    "types": ["node", "jest"],
+    "paths": { "@src/*": ["./@src/*"] }
   }
 }

@@ -1,4 +1,6 @@
 import { AppModule } from '@src/app.module';
+import CustomError from '../errors';
+import { ErrorIds } from '../errors/messages';
 import { PaginationQuery } from '../interfaces/queries';
 import { IdResource } from '../interfaces/resources';
 import UtilsService from '../utils';
@@ -10,11 +12,7 @@ export default class JSONModel<T extends IdResource> {
 
   constructor(args: { model: string }) {
     this.model = args.model;
-    this.path = '@src/' + AppModule._CONFIG.db_path + this.model;
-  }
-
-  public static getNewId(): string {
-    return new Date().getTime().toString() + (Math.random() * 15000).toString();
+    this.path = '@src/' + AppModule._CONFIG.db_path + `/${this.model}.json`;
   }
 
   public async addMany(addItems: T[]): Promise<T[]> {
@@ -22,7 +20,7 @@ export default class JSONModel<T extends IdResource> {
 
     const allItems = await this.getAll();
     if (allItems.some((e) => idsSet.has(e._id)))
-      throw new Error('Id Already In Use');
+      throw new CustomError(ErrorIds.DB.DuplicateID);
 
     const responseItems = [...allItems, ...addItems];
     await this.writeItems(responseItems);
@@ -30,19 +28,32 @@ export default class JSONModel<T extends IdResource> {
   }
 
   public async getAll(): Promise<T[]> {
-    const { items } = await UtilsService.readJSON<{ items: T[] }>(this.path);
+    const { items } = await UtilsService.readJSON<{ items: T[] }>(
+      this.path,
+    ).catch((e) => {
+      if (e instanceof CustomError && e._id === ErrorIds.DB.FileNotFound)
+        return { items: [] };
+      throw e;
+    });
     return items;
   }
 
   public async getById(_id: string): Promise<T> {
-    const item = (await this.getAll()).find(e => e._id === _id);
-    if(!item) throw new Error("Item Not Found");
+    const item = (await this.getAll()).find((e) => e._id === _id);
+    if (!item) throw new CustomError(ErrorIds.DB.RecordNotFound);
     return item;
   }
 
-  public async getPage(paginationQuery: PaginationQuery): Promise<T[]> {
+  public async getPage(
+    paginationQuery: PaginationQuery,
+    filter?: (items: T[]) => T[],
+  ): Promise<T[]> {
     const allItems = await this.getAll();
-    const responseItems = PaginationService.paginate({items: allItems, paginationQuery});
+    let filteredItems = filter ? filter(allItems) : allItems;
+    const responseItems = PaginationService.paginate({
+      items: filteredItems,
+      paginationQuery,
+    });
     return responseItems;
   }
 
@@ -63,9 +74,9 @@ export default class JSONModel<T extends IdResource> {
 
   public async deleteById(id: string): Promise<T> {
     const items = await this.getAll();
-    const item = (items).find(e => e._id === id );
-    if(!item) throw new Error("Item Not Found");
-    await this.writeItems(items.filter(e => !(e._id === id)));
+    const item = items.find((e) => e._id === id);
+    if (!item) throw new CustomError(ErrorIds.DB.RecordNotFound);
+    await this.writeItems(items.filter((e) => !(e._id === id)));
     return item;
   }
 
@@ -85,7 +96,7 @@ export default class JSONModel<T extends IdResource> {
   private getIdsSet(items: T[]): Set<string> {
     const idsSet = new Set<string>();
     for (const item of items) {
-      if (idsSet.has(item._id)) throw new Error('Id Already In Use');
+      if (idsSet.has(item._id)) throw new CustomError(ErrorIds.DB.DuplicateID);
       idsSet.add(item._id);
     }
     return idsSet;

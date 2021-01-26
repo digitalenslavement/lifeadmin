@@ -1,3 +1,4 @@
 {
-  "db-path": "./db"
+  "db-path": "./db",
+  "port": 3000
 }
