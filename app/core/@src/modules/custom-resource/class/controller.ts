@@ -43,7 +43,7 @@ export default class CustomResourceClassController {
     @wValidatedArg(AGETCustomResourceClassListPageSchema)
     args: IAGETCustomResourceClassListPage,
   ): Promise<IRGETCustomResourceClassListPage> {
-    return this._Model.getPage(args);
+    return this._Model.getPage(args.pagination);
   }
 
   @Delete('/')

@@ -58,15 +58,19 @@ export default class JSONModel<
   }
 
   public async getPage(
-    paginationQuery: PaginationQuery,
+    paginationQuery?: PaginationQuery,
     filter?: (items: T[]) => T[],
   ): Promise<T[]> {
     const allItems = await this.getAll();
     let filteredItems = filter ? filter(allItems) : allItems;
-    return PaginationService.paginate({
-      items: filteredItems,
-      paginationQuery,
-    });
+    let paginatedItems = paginationQuery
+      ? PaginationService.paginate({
+          items: filteredItems,
+          paginationQuery,
+        })
+      : filteredItems;
+
+    return paginatedItems;
   }
 
   public async editMany(rawEditItems: T[]): Promise<T[]> {

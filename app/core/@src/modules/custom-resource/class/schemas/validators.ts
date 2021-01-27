@@ -34,8 +34,10 @@ export type IRGETCustomResourceClass = ICustomResourceClass;
 export const RGETCustomResourceClassSchema = CustomResourceClassSchema;
 
 // Get Common Resource Class List Page
-export type IAGETCustomResourceClassListPage = PaginationQuery;
-export const AGETCustomResourceClassListPageSchema = PaginationQuerySchema;
+export type IAGETCustomResourceClassListPage = { pagination?: PaginationQuery };
+export const AGETCustomResourceClassListPageSchema = Joi.object({
+  pagination: PaginationQuerySchema.optional(),
+});
 
 export type IRGETCustomResourceClassListPage = ICustomResourceClass[];
 export const RGETCustomResourceClassListPageSchem = Joi.array().items(
